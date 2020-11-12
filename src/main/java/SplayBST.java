@@ -7,7 +7,6 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     private static class Node<T> {
         T value;
-        Node<T> parent = null;
         Node<T> left = null;
         Node<T> right = null;
 
@@ -141,7 +140,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     @NotNull
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<T> iterator() { //**********************************************************************************
         return null;
     }
 
