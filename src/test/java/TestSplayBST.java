@@ -1,11 +1,11 @@
 import org.junit.jupiter.api.Test;
 
-public class TestSplayBST {
+class TestSplayBST {
 
         @Test
-        public void splayTree() {
-                SplayBST<Integer> actual = new SplayBST<Integer>();
-                SplayBST<Integer> control = new SplayBST<Integer>();
+        void splayTree() {
+                SplayBST<Integer> actual = new SplayBST<>();
+                SplayBST<Integer> control = new SplayBST<>();
 
                 actual.add(15);
                 actual.add(3);

@@ -26,7 +26,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         else return 1 + size(node.left) + size(node.right);
     }
 
-    public boolean contains(T element) {
+    private boolean contains(T element) {
         return find(element) != null;
     }
 
