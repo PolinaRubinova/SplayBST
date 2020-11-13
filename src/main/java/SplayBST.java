@@ -1,7 +1,6 @@
 import org.jetbrains.annotations.NotNull;
 
-import java.util.AbstractSet;
-import java.util.Iterator;
+import java.util.*;
 
 public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
@@ -140,8 +139,26 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     @NotNull
     @Override
-    public Iterator<T> iterator() { //**********************************************************************************
-        return null;
+    public Iterator<T> iterator() {
+        return new SplayBSTIterator();
+    }
+
+    public class SplayBSTIterator implements Iterator<T> { //***********************************************************
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public T next() {
+            return null;
+        }
+
+        @Override
+        public void remove() {
+
+        }
     }
 
 
@@ -166,19 +183,77 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return x;
     }
 
-    public void printTree () {
-        if (isEmpty())
-            System.out.println("Empty tree");
-        else
-            printTree(root);
+    public void printTree() {
+        int maxLevel = maxLevel(root);
+        printNodeInternal(Collections.singletonList(root), 1, maxLevel);
     }
 
-    private void printTree (Node<T> node) {
-        if (node == null)
-            return;
+        private static <T extends Comparable<?>> void printNodeInternal(List<Node<T>> nodes, int level, int maxLevel) {
+            if (nodes.isEmpty() || isAllElementsNull(nodes)) return;
 
-        printTree(node.left);
-        System.out.println(node.value);
-        printTree(node.right);
-    }
+            int floor = maxLevel - level;
+            int lines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
+            int firstSpaces = (int) Math.pow(2, (floor)) - 1;
+            int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
+
+            printWhitespaces(firstSpaces);
+
+            ArrayList<Node<T>> newNodes = new ArrayList<>();
+
+            for (Node<T> node : nodes) {
+                if (node != null) {
+                    System.out.print(node.value);
+                    newNodes.add(node.left);
+                    newNodes.add(node.right);
+                } else {
+                    newNodes.add(null);
+                    newNodes.add(null);
+                    System.out.print(" ");
+                }
+
+                printWhitespaces(betweenSpaces);
+            }
+            System.out.println("");
+
+            for (int i = 1; i <= lines; i++) {
+                for (Node<T> node : nodes) {
+                    printWhitespaces(firstSpaces - i);
+                    if (node == null) {
+                        printWhitespaces(lines + lines + i + 1);
+                        continue;
+                    }
+
+                    if (node.left != null) {
+                        System.out.print("/");
+                    } else printWhitespaces(1);
+
+                    printWhitespaces(i + i - 1);
+
+                    if (node.right != null) {
+                        System.out.print("\\");
+                    } else printWhitespaces(1);
+
+                    printWhitespaces(lines + lines - i);
+                }
+                System.out.println("");
+            }
+            printNodeInternal(newNodes, level + 1, maxLevel);
+        }
+
+        private static void printWhitespaces(int count) {
+            for (int i = 0; i < count; i++) System.out.print(" ");
+        }
+
+        private static <T extends Comparable<?>> int maxLevel(Node<T> node) {
+            return (node == null) ? 0 :
+                    Math.max(maxLevel(node.left), maxLevel(node.right)) + 1;
+        }
+
+        private static <T> boolean isAllElementsNull(List<T> list) {
+            for (Object object : list) {
+                if (object != null)
+                    return false;
+            }
+            return true;
+        }
 }
