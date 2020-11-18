@@ -26,23 +26,24 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         else return 1 + size(node.left) + size(node.right);
     }
 
-    private boolean contains(T element) {
+    public  boolean contains(T element) {
         return find(element) != null;
     }
 
 
+    // Эта функция возвращает новый корень Splay Tree
+    // Если элемент присутствует в дереве, он перемещается в корень.
+
     private Node<T> find(T value) {
         if (root == null) return null;
-
-        root = splay(root, value);
-
-        int comparison = value.compareTo(root.value);
-        if (comparison == 0) {
-            return root;
-        }
-        return null;
+       return root = splay(root, value);
     }
 
+
+    // Добавление элемента в дерево
+
+    // Если элемента нет в множестве, функция добавляет его в дерево и возвращает true.
+    // В ином случае функция оставляет множество нетронутым и возвращает false.
 
     @Override
     public boolean add(T t) {
@@ -95,43 +96,67 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     }
 
 
+    // Эта функция помещает ключ в корень, если ключ
+    // присутствует в дереве. Если ключ отсутствует,
+    // он переносит последний доступный элемент в корневой каталог.
+    // Эта функция изменяет дерево и возвращает новый корень.
 
     private Node<T> splay(Node<T> node, T element) {
         if (node == null || node.value == element) return null;
 
+        //Если ключ находится в левом поддереве
         int cmp1 = element.compareTo(node.value);
-
         if (cmp1 < 0) {
+            // Если ключ не в дереве -> мы закончили
             if (node.left == null) return node;
 
+            // Zig-Zig (Left Left)
             int cmp2 = element.compareTo(node.left.value);
             if (cmp2 < 0) {
+                // Сначала рекурсивно приведем ключ как корень left-left
                 node.left.left = splay(node.left.left, element);
+                // Сделаем первое вращение для корня,
+                // второе вращение выполняется после else
                 node = rotateRight(node);
             }
+
+            // Zig-Zag (Left Right)
             else if (cmp2 > 0) {
+                // Сначала рекурсивно приведем ключ как корень left-right
                 node.left.right = splay(node.left.right, element);
+                // Сделаем первое вращение для root.left
                 if (node.left.right != null)
                     node.left = rotateLeft(node.left);
             }
 
+            // Сделаем второе вращение для корня
             return  (node.left == null) ? node : rotateRight(node);
         }
 
+        //Если ключ находится в правом поддереве
         else {
+            // Если ключ не в дереве -> мы закончили
             if (node.right == null) return node;
 
+            // Zag-Zig (Right Left)
             int cmp2 = element.compareTo(node.right.value);
             if (cmp2 < 0) {
+                // Приведем ключ как корень right-left
                 node.right.left  = splay(node.right.left, element);
+                // Сделаем первое вращение для root.right
                 if (node.right.left != null)
                     node.right = rotateRight(node.right);
             }
+
+            // Zag-Zag (Right Right)
             else if (cmp2 > 0) {
+                // Приведем ключ как корень right-right
+                // и сделаем первое вращение
                 node.right.right = splay(node.right.right, element);
                 node = rotateLeft(node);
             }
 
+            // Сделаем второе вращение для корня
             return (node.right == null) ? node : rotateLeft(node);
         }
     }
@@ -161,26 +186,20 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         }
     }
 
-
-    public int height() { return height(root); }
-    private int height(Node<T> x) {
-        if (x == null) return -1;
-        return 1 + Math.max(height(x.left), height(x.right));
+    // Правое вращение подерева с корнем y
+    private Node<T> rotateRight(Node<T> x) {
+        Node<T> y = x.left;
+        x.left = y.right;
+        y.right = x;
+        return y;
     }
 
-
-    private Node<T> rotateRight(Node<T> h) {
-        Node<T> x = h.left;
-        h.left = x.right;
-        x.right = h;
-        return x;
-    }
-
-    private Node<T> rotateLeft(Node<T> h) {
-        Node<T> x = h.right;
-        h.right = x.left;
-        x.left = h;
-        return x;
+    // Левое вращение подерева с корнем x
+    private Node<T> rotateLeft(Node<T> x) {
+        Node<T> y = x.right;
+        x.right = y.left;
+        y.left = x;
+        return y;
     }
 
     public void printTree() {

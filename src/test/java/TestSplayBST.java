@@ -21,25 +21,45 @@ class TestSplayBST {
                 control.add(10);
                 control.add(2);
 
+                System.out.println("actual:");
                 actual.printTree();
+                System.out.println("control:");
                 control.printTree();
                 System.out.println(actual == control);
 
-                actual.remove(10);
+                System.out.println("actual.contains(10) = " + actual.contains(10));
+                System.out.println("actual:");
                 actual.printTree();
-                System.out.println(actual == control);
+                System.out.println("control:");
+                control.printTree();
+                System.out.println("actual == control = " + (actual == control));
 
-                actual.remove(2);
+                actual.remove(5);
                 actual.printTree();
-                System.out.println(actual == control);
+                System.out.println("actual == control = " + (actual == control));
+
+                actual.remove(10);
+                System.out.println("actual:");
+                actual.printTree();
+                System.out.println("actual == control = " + (actual == control));
 
                 actual.add(11);
                 actual.add(12);
+                System.out.println("actual:");
                 actual.printTree();
-                System.out.println(actual == control);
+                System.out.println("actual == control = " + (actual == control));
 
                 System.out.println(actual.contains(2));
+                System.out.println("actual:");
                 actual.printTree();
+                System.out.println("control:");
                 control.printTree();
+                System.out.println("control.size() = " + control.size());
+                System.out.println("actual == control = " + (actual == control));
+
+                System.out.println(actual.contains(12));
+                System.out.println("actual:");
+                actual.printTree();
+                System.out.println("actual.size() = " + actual.size());
         }
 }
