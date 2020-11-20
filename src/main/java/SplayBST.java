@@ -21,10 +21,17 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return size(root);
     }
 
+    // Рекурсивно находим размер дерева
+
     private int size(Node<T> node) {
         if (node == null) return 0;
         return 1 + size(node.left) + size(node.right);
     }
+
+    // С помощью функции find находим элемент,
+    // если он был в дереве, то, из-за функции splay,
+    // он стал корнем. Поэтому, если find вернул что угодно
+    // (null или другой элемент), кроме нашего элемента -> false
 
     public  boolean contains(T element) {
         return find(element) != null &&
