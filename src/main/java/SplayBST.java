@@ -23,11 +23,12 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     private int size(Node<T> node) {
         if (node == null) return 0;
-        else return 1 + size(node.left) + size(node.right);
+        return 1 + size(node.left) + size(node.right);
     }
 
     public  boolean contains(T element) {
-        return find(element) != null;
+        return find(element) != null &&
+                Objects.requireNonNull(find(element)).value == element;
     }
 
 
@@ -36,7 +37,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     private Node<T> find(T value) {
         if (root == null) return null;
-       return root = splay(root, value);
+        return root = splay(root, value);
     }
 
 
@@ -46,33 +47,46 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // В ином случае функция оставляет множество нетронутым и возвращает false.
 
     @Override
-    public boolean add(T t) {
+    public boolean add(T element) {
 
         if (root == null) {
-            root = new Node<>(t);
+            root = new Node<>(element);
             return true;
         }
 
-        root = splay(root, t);
+        root = splay(root, element);
+        if (root.value == element) return false;
 
-        int comparison = t.compareTo(root.value);
-        Node<T> newNode = new Node<>(t);
+        int comparison = element.compareTo(root.value);
+        Node<T> newNode = new Node<>(element);
 
+        // Если элемент меньше значения корня, то корень
+        // становится правым потомком нового узла,
+        // а левый потомок корня становится левым потомком
+        // нового узла
         if (comparison < 0) {
-            newNode.left = root.left;
             newNode.right = root;
+            newNode.left = root.left;
             root.left = null;
         }
 
-        else if (comparison > 0) {
+        // Если элемент больше значения корня, то корень
+        // становится левым потомком нового узла,
+        // а правый потомок корня становится правым потомком
+        // нового узла
+        else {
             newNode.left = root;
             newNode.right = root.right;
             root.right = null;
         }
+
+        // Новый узел становится корнем
         root = newNode;
 
         return true;
     }
+
+    // Функция удаления элемента из дерева
 
     @Override
     public boolean remove(Object object) {
@@ -80,29 +94,35 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         if (root == null) return false;
 
         root = splay(root, element);
+        if (root.value != element) return false;
 
-        int comparison = element.compareTo(root.value);
+        root.left = splay(root.left, element);
 
-        if (comparison == 0) {
-            if (root.left == null) {
-                root = root.right;
-            } else {
-                Node<T> x = root.right;
-                root = splay(root.left, element);
-                root.right = x;
-            }
+        // Если левого потомка нет,
+        // корнем становится правый потомок
+        if (root.left == null) {
+            root = root.right;
+        }
+
+        // Если левый потомок существует
+        // правый потомок корня становится правым
+        // потомком левого потомка корня,
+        // а левый потомок становится корнем
+        else {
+            root.left.right = root.right;
+            root = root.left;
         }
         return true;
     }
 
 
-    // Эта функция помещает ключ в корень, если ключ
+    // Эта функция помещает ключ в корень, если элемент
     // присутствует в дереве. Если ключ отсутствует,
     // он переносит последний доступный элемент в корневой каталог.
     // Эта функция изменяет дерево и возвращает новый корень.
 
     private Node<T> splay(Node<T> node, T element) {
-        if (node == null || node.value == element) return null;
+        if (node == null || node.value == element) return node;
 
         //Если ключ находится в левом поддереве
         int cmp1 = element.compareTo(node.value);
@@ -202,12 +222,14 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return y;
     }
 
+
+    // Визуализация
     public void printTree() {
         int maxLevel = maxLevel(root);
-        printNodeInternal(Collections.singletonList(root), 1, maxLevel);
+        printTree(Collections.singletonList(root), 1, maxLevel);
     }
 
-    private static <T extends Comparable<?>> void printNodeInternal(List<Node<T>> nodes, int level, int maxLevel) {
+    private static <T extends Comparable<?>> void printTree(List<Node<T>> nodes, int level, int maxLevel) {
         if (nodes.isEmpty() || isAllElementsNull(nodes)) return;
 
         int floor = maxLevel - level;
@@ -215,7 +237,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         int firstSpaces = (int) Math.pow(2, (floor)) - 1;
         int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-        printWhitespaces(firstSpaces);
+        printWhiteSpaces(firstSpaces);
         ArrayList<Node<T>> newNodes = new ArrayList<>();
 
         for (Node<T> node : nodes) {
@@ -228,36 +250,37 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
                 newNodes.add(null);
                 System.out.print(" ");
             }
-            printWhitespaces(betweenSpaces);
+            printWhiteSpaces(betweenSpaces);
         }
         System.out.println();
 
         for (int i = 1; i <= lines; i++) {
             for (Node<T> node : nodes) {
-                printWhitespaces(firstSpaces - i);
+                printWhiteSpaces(firstSpaces - i);
                 if (node == null) {
-                    printWhitespaces(lines + lines + i + 1);
+                    printWhiteSpaces(lines + lines + i + 1);
                     continue;
                 }
 
                 if (node.left != null) {
                     System.out.print("/");
-                } else printWhitespaces(1);
+                } else printWhiteSpaces(1);
 
-                printWhitespaces(i + i - 1);
+                printWhiteSpaces(i + i - 1);
 
                 if (node.right != null) {
                     System.out.print("\\");
-                } else printWhitespaces(1);
+                } else printWhiteSpaces(1);
 
-                printWhitespaces(lines + lines - i);
+                printWhiteSpaces(lines + lines - i);
             }
             System.out.println();
         }
-        printNodeInternal(newNodes, level + 1, maxLevel);
+        printTree(newNodes, level + 1, maxLevel);
     }
 
-    private static void printWhitespaces(int count) {
+    // Печатаем пробелы
+    private static void printWhiteSpaces(int count) {
         for (int i = 0; i < count; i++) System.out.print(" ");
     }
 
@@ -266,6 +289,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
                 Math.max(maxLevel(node.left), maxLevel(node.right)) + 1;
     }
 
+    // Проверяем, все ли элементы равны null
     private static <T> boolean isAllElementsNull(List<T> list) {
         for (Object object : list) {
             if (object != null)

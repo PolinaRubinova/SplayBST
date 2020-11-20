@@ -25,40 +25,49 @@ class TestSplayBST {
                 actual.printTree();
                 System.out.println("control:");
                 control.printTree();
-                System.out.println(actual == control);
+                System.out.println("actual == control = " + (actual == control));
 
+                System.out.println();
+                System.out.println("actual.size() = " + actual.size());
                 System.out.println("actual.contains(10) = " + actual.contains(10));
-                System.out.println("actual:");
+                System.out.println("actual после contains(10):");
                 actual.printTree();
                 System.out.println("control:");
                 control.printTree();
                 System.out.println("actual == control = " + (actual == control));
 
+                System.out.println();
                 actual.remove(5);
+                System.out.println("actual после удаления 5:");
                 actual.printTree();
                 System.out.println("actual == control = " + (actual == control));
 
+                System.out.println();
                 actual.remove(10);
-                System.out.println("actual:");
+                System.out.println("actual после удаления 10:");
                 actual.printTree();
                 System.out.println("actual == control = " + (actual == control));
 
+                System.out.println();
                 actual.add(11);
                 actual.add(12);
-                System.out.println("actual:");
+                System.out.println("actual после добавления 11 и 12:");
                 actual.printTree();
                 System.out.println("actual == control = " + (actual == control));
 
-                System.out.println(actual.contains(2));
-                System.out.println("actual:");
+                System.out.println();
+                System.out.println("actual.contains(2) = " + actual.contains(2));
+                System.out.println("actual после contains(2):");
                 actual.printTree();
                 System.out.println("control:");
                 control.printTree();
                 System.out.println("control.size() = " + control.size());
                 System.out.println("actual == control = " + (actual == control));
 
-                System.out.println(actual.contains(12));
-                System.out.println("actual:");
+                System.out.println();
+                System.out.println("actual.contains(12) = " + actual.contains(12));
+                System.out.println("actual.add(12) = " + actual.add(12));
+                System.out.println("actual после contains(12):");
                 actual.printTree();
                 System.out.println("actual.size() = " + actual.size());
         }
