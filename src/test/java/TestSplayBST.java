@@ -1,5 +1,9 @@
 import org.junit.jupiter.api.Test;
 import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 class TestSplayBST {
@@ -149,6 +153,48 @@ class TestSplayBST {
                 System.out.println("tree after merge =");
                 control.merge(res.left, res.right);
                 control.printTree(control.root);
+        }
+
+        @Test
+        void testIterator() {
+                actual = new SplayBST<>();
+                control = new SplayBST<>();
+
+                assertTrue(actual.add(5));
+                assertTrue(actual.add(2));
+                assertTrue(actual.add(10));
+                assertTrue(actual.add(1));
+                assertTrue(actual.add(3));
+                assertTrue(actual.add(15));
+
+                assertTrue(control.add(1));
+                assertTrue(control.add(15));
+                assertTrue(control.add(3));
+                assertTrue(control.add(5));
+                assertTrue(control.add(10));
+                assertTrue(control.add(2));
+                control.printTree(control.root);
+
+                Iterator<Integer> iterator1 = actual.iterator();
+                List<Integer> check1 = new ArrayList<>();
+                Iterator<Integer> iterator2 = control.iterator();
+                List<Integer> check2 = new ArrayList<>();
+
+                while (iterator1.hasNext()) {
+                        check1.add(iterator1.next());
+                        check2.add(iterator2.next());
+                }
+                assertEquals(actual, control);
+                assertArrayEquals(check1.toArray(), check2.toArray());
+
+                iterator2 = control.iterator();
+
+                while (iterator2.hasNext()) {
+                        iterator2.next();
+                        iterator2.remove();
+                        control.printTree(control.root);
+                        assertNotEquals(actual, control);
+                }
 
         }
 }

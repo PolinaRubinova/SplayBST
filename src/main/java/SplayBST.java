@@ -266,6 +266,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // он переносит последний доступный элемент в корневой каталог.
     // Эта функция изменяет дерево и возвращает новый корень.
 
+    // T = O(log2N), где N — число элементов в дереве.
+
     private Node<T> splay(Node<T> node, T element) {
         if (node == null || node.value == element) return node;
 
@@ -326,31 +328,6 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         }
     }
 
-
-    @NotNull
-    @Override
-    public Iterator<T> iterator() {
-        return new SplayBSTIterator();
-    }
-
-    public class SplayBSTIterator implements Iterator<T> { //***********************************************************
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public T next() {
-            return null;
-        }
-
-        @Override
-        public void remove() {
-
-        }
-    }
-
     // Правое вращение подерева с корнем y
     private Node<T> rotateRight(Node<T> x) {
         Node<T> y = x.left;
@@ -365,6 +342,56 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         x.right = y.left;
         y.left = x;
         return y;
+    }
+
+
+    // Итератор как для бинарного дерева поиска.
+
+    @NotNull
+    @Override
+    public Iterator<T> iterator() {
+        return new SplayBSTIterator();
+    }
+
+    public class SplayBSTIterator implements Iterator<T> {
+
+        private final Stack<Node<T>> stack = new Stack<>();
+        private Node<T> current = new Node<>(null);
+
+        private void inOrderIterator(Node<T> node) {
+            if (node != null) {
+                stack.push(node);
+                inOrderIterator(node.left);
+            }
+        }
+
+        private SplayBSTIterator() {
+            inOrderIterator(root);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
+            Node<T> node = stack.pop();
+            current = node;
+            inOrderIterator(node.right);
+
+            return node.value;
+        }
+
+
+        @Override
+        public void remove() {
+            if (current == null) throw new IllegalStateException();
+            SplayBST.this.remove(current.value);
+            current = null;
+        }
     }
 
 
