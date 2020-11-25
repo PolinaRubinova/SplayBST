@@ -73,7 +73,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     }
 
 
-    public class Pair<U, V> {
+    public class Pair {
         public Node<T> left;
         public Node<T> right;
 
@@ -87,8 +87,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // поддерева от корня, в зависимости от того, содержит корень
     // элемент больше или не больше, чем element.
 
-    public Pair<Node<T>, Node<T>> split (T element) {
-        if (root == null) return new Pair<>(null, null);
+    public Pair split (T element) {
+        if (root == null) return new Pair(null, null);
 
         Node<T> left = null;
         Node<T> right = null;
@@ -107,7 +107,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             right = root;
         }
 
-        return new Pair<>(left, right);
+        return new Pair(left, right);
     }
 
     // Находим максимальный элемент
