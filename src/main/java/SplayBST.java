@@ -366,6 +366,9 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         private final Stack<Node<T>> stack = new Stack<>();
         private Node<T> current = new Node<>(null);
 
+        // Из текущего узла «спускаемся» до самого нижнего левого
+        // узла, добавляя в стек все посещенные узлы.
+
         private void inOrderIterator(Node<T> node) {
             Node<T> n = node;
             while (n != null) {
@@ -383,6 +386,9 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             return !stack.isEmpty();
         }
 
+        // Если в текущем узле имеется правое поддерево,
+        // начинаем следующую итерацию с правого узла.
+
         @Override
         public T next() {
             if (!hasNext()) throw new NoSuchElementException();
@@ -390,7 +396,6 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             Node<T> node = stack.pop();
             current = node;
             inOrderIterator(node.right);
-
             return node.value;
         }
 
