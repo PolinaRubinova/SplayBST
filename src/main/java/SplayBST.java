@@ -367,9 +367,10 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         private Node<T> current = new Node<>(null);
 
         private void inOrderIterator(Node<T> node) {
-            if (node != null) {
-                stack.push(node);
-                inOrderIterator(node.left);
+            Node<T> n = node;
+            while (n != null) {
+                stack.push(n);
+                n = n.left;
             }
         }
 
