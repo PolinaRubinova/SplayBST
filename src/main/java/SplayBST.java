@@ -1,5 +1,4 @@
 import java.util.*;
-import org.jetbrains.annotations.NotNull;
 
 public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
@@ -357,7 +356,6 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     // Итератор как для бинарного дерева поиска.
 
-    @NotNull
     @Override
     public Iterator<T> iterator() {
         return new SplayBSTIterator();
