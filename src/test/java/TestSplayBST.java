@@ -7,193 +7,224 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 class TestSplayBST {
-        AbstractSet<Integer> actual = new SplayBST<>();
-        SplayBST<Integer> control = new SplayBST<>();
+        AbstractSet<Integer> tree1 = new SplayBST<>();
+        SplayBST<Integer> tree2 = new SplayBST<>();
 
         @Test
         void testAddAddWithSplitContainsFind() {
-                actual = new SplayBST<>();
-                control = new SplayBST<>();
+                tree1 = new SplayBST<>();
+                tree2 = new SplayBST<>();
 
-                assertTrue(actual.add(5));
-                assertTrue(actual.add(15));
-                assertTrue(actual.add(1));
-                assertTrue(actual.add(3));
-                assertTrue(actual.add(10));
-                assertTrue(actual.add(2));
-                assertEquals(actual.size(), 6);
-                assertFalse(actual.isEmpty());
+                assertTrue(tree1.add(5));
+                assertTrue(tree1.add(15));
+                assertTrue(tree1.add(1));
+                assertTrue(tree1.add(3));
+                assertTrue(tree1.add(10));
+                assertTrue(tree1.add(2));
+                assertEquals(tree1.size(), 6);
+                assertFalse(tree1.isEmpty());
 
-                assertTrue(actual.contains(5));
-                assertTrue(actual.contains(15));
-                assertTrue(actual.contains(10));
-                assertTrue(actual.contains(2));
+                assertTrue(tree1.contains(5));
+                assertTrue(tree1.contains(15));
+                assertTrue(tree1.contains(10));
+                assertTrue(tree1.contains(2));
 
-                assertFalse(actual.contains(6));
-                assertFalse(actual.contains(7));
-                assertFalse(actual.contains(0));
-                assertFalse(actual.contains(16));
+                assertFalse(tree1.contains(6));
+                assertFalse(tree1.contains(7));
+                assertFalse(tree1.contains(0));
+                assertFalse(tree1.contains(16));
 
-                assertTrue(control.addWithSplit(1));
-                assertTrue(control.addWithSplit(15));
-                assertTrue(control.addWithSplit(3));
-                assertTrue(control.addWithSplit(5));
-                assertTrue(control.addWithSplit(10));
-                assertTrue(control.addWithSplit(2));
-                assertEquals(control.size(), 6);
-                assertFalse(control.isEmpty());
+                assertTrue(tree2.addWithSplit(1));
+                assertTrue(tree2.addWithSplit(15));
+                assertTrue(tree2.addWithSplit(3));
+                assertTrue(tree2.addWithSplit(5));
+                assertTrue(tree2.addWithSplit(10));
+                assertTrue(tree2.addWithSplit(2));
+                assertEquals(tree2.size(), 6);
+                assertFalse(tree2.isEmpty());
 
-                assertTrue(control.contains(5));
-                assertTrue(control.contains(10));
-                assertTrue(control.contains(2));
-                assertTrue(control.contains(3));
+                assertTrue(tree2.contains(5));
+                assertTrue(tree2.contains(10));
+                assertTrue(tree2.contains(2));
+                assertTrue(tree2.contains(3));
 
-                assertFalse(control.contains(6));
-                assertFalse(control.contains(7));
-                assertFalse(control.contains(0));
-                assertFalse(control.contains(16));
+                assertFalse(tree2.contains(6));
+                assertFalse(tree2.contains(7));
+                assertFalse(tree2.contains(0));
+                assertFalse(tree2.contains(16));
 
-                assertEquals(actual, control);
-                assertTrue(control.contains(15));
-                assertEquals(control.getRootValue(), 15);
-                assertTrue(control.contains(2));
-                assertEquals(control.getRootValue(), 2);
+                assertEquals(tree1, tree2);
+                assertTrue(tree2.contains(15));
+                assertEquals(tree2.getRootValue(), 15);
+                assertTrue(tree2.contains(2));
+                assertEquals(tree2.getRootValue(), 2);
         }
 
 
         @Test
         void testRemoveRemoveWitSplit() {
-                actual = new SplayBST<>();
-                control = new SplayBST<>();
+                tree1 = new SplayBST<>();
+                tree2 = new SplayBST<>();
 
-                assertTrue(actual.add(5));
-                assertTrue(actual.add(15));
-                assertTrue(actual.add(1));
-                assertTrue(actual.add(3));
-                assertTrue(actual.add(10));
-                assertTrue(actual.add(2));
+                assertTrue(tree1.add(5));
+                assertTrue(tree1.add(15));
+                assertTrue(tree1.add(1));
+                assertTrue(tree1.add(3));
+                assertTrue(tree1.add(10));
+                assertTrue(tree1.add(2));
 
-                assertTrue(control.addWithSplit(1));
-                assertTrue(control.addWithSplit(15));
-                assertTrue(control.addWithSplit(3));
-                assertTrue(control.addWithSplit(5));
-                assertTrue(control.addWithSplit(10));
-                assertTrue(control.addWithSplit(2));
+                assertTrue(tree2.addWithSplit(1));
+                assertTrue(tree2.addWithSplit(15));
+                assertTrue(tree2.addWithSplit(3));
+                assertTrue(tree2.addWithSplit(5));
+                assertTrue(tree2.addWithSplit(10));
+                assertTrue(tree2.addWithSplit(2));
 
-                assertEquals(actual, control);
-                assertFalse(actual.remove(0));
-                assertTrue(actual.contains(5));
-                assertTrue(actual.remove(5));
-                assertFalse(actual.remove(5));
-                assertFalse(actual.contains(5));
+                assertEquals(tree1, tree2);
+                assertFalse(tree1.remove(0));
+                assertTrue(tree1.contains(5));
+                assertTrue(tree1.remove(5));
+                assertFalse(tree1.remove(5));
+                assertFalse(tree1.contains(5));
 
-                assertNotEquals(actual, control);
-                assertTrue(actual.remove(1));
-                assertFalse(actual.remove(1));
-                assertTrue(actual.remove(15));
-                assertFalse(actual.remove(15));
-                assertEquals(actual.size(), 3);
-                assertFalse(actual.isEmpty());
+                assertNotEquals(tree1, tree2);
+                assertTrue(tree1.remove(1));
+                assertFalse(tree1.remove(1));
+                assertTrue(tree1.remove(15));
+                assertFalse(tree1.remove(15));
+                assertEquals(tree1.size(), 3);
+                assertFalse(tree1.isEmpty());
 
-                assertTrue(actual.remove(2));
-                assertTrue(actual.remove(3));
-                assertTrue(actual.remove(10));
-                assertTrue(actual.isEmpty());
+                assertTrue(tree1.remove(2));
+                assertTrue(tree1.remove(3));
+                assertTrue(tree1.remove(10));
+                assertTrue(tree1.isEmpty());
 
-                assertFalse(control.removeWithSplit(0));
-                assertTrue(control.contains(5));
-                assertTrue(control.removeWithSplit(5));
-                assertFalse(control.removeWithSplit(5));
-                assertFalse(control.contains(5));
+                assertFalse(tree2.removeWithSplit(0));
+                assertTrue(tree2.contains(5));
+                assertTrue(tree2.removeWithSplit(5));
+                assertFalse(tree2.removeWithSplit(5));
+                assertFalse(tree2.contains(5));
 
-                assertNotEquals(actual, control);
-                assertTrue(control.removeWithSplit(1));
-                assertFalse(control.removeWithSplit(1));
-                assertTrue(control.removeWithSplit(15));
-                assertFalse(control.removeWithSplit(15));
-                assertEquals(control.size(), 3);
-                assertFalse(control.isEmpty());
+                assertNotEquals(tree1, tree2);
+                assertTrue(tree2.removeWithSplit(1));
+                assertFalse(tree2.removeWithSplit(1));
+                assertTrue(tree2.removeWithSplit(15));
+                assertFalse(tree2.removeWithSplit(15));
+                assertEquals(tree2.size(), 3);
+                assertFalse(tree2.isEmpty());
 
-                assertTrue(control.remove(2));
-                assertTrue(control.remove(3));
-                assertTrue(control.remove(10));
-                assertTrue(control.isEmpty());
-                assertEquals(actual, control);
+                assertTrue(tree2.remove(2));
+                assertTrue(tree2.remove(3));
+                assertTrue(tree2.remove(10));
+                assertTrue(tree2.isEmpty());
+                assertEquals(tree1, tree2);
         }
 
         @Test
         void testSplitMergeFindMaxFindMinVisualization() {
-                control = new SplayBST<>();
+                tree2 = new SplayBST<>();
+                SplayBST.Pair res = null;
 
-                control.add(10);
-                control.add(1);
-                control.add(15);
-                control.add(5);
-                control.add(2);
-                control.add(3);
-                control.printTree(control.root);
+                tree2.add(10);
+                tree2.add(1);
+                tree2.add(15);
+                tree2.add(5);
+                tree2.add(2);
+                tree2.add(6);
+                tree2.add(11);
+                tree2.add(13);
+                tree2.add(25);
+                tree2.add(4);
+                tree2.add(21);
+                tree2.add(7);
 
-                control.root = control.findMax(control.root);
-                System.out.println("fMax=" + control.root.value);
+                System.out.println("fMax=" + tree2.findMax(tree2.root));
+                System.out.println("fMin=" + tree2.findMin(tree2.root));
                 System.out.println("control=");
-                control.printTree(control.root);
-
-                control.root = control.findMin(control.root);
-                System.out.println("fMin=" + control.root.value);
-                System.out.println("control=");
-                control.printTree(control.root);
+                tree2.printTree(tree2.root);
 
 
-                SplayBST.Pair res = control.split(5);
-                System.out.println("left side after split(5) =");
-                control.printTree(res.left);
-                System.out.println("right side after split(5) =");
-                control.printTree(res.right);
+                res = tree2.split(15);
+                System.out.println("left side after split(15) =");
+                tree2.printTree(res.left);
+                System.out.println("right side after split(15) =");
+                tree2.printTree(res.right);
 
                 System.out.println("tree after merge =");
-                control.merge(res.left, res.right);
-                control.printTree(control.root);
+                tree2.merge(res.left, res.right);
+                tree2.printTree(tree2.root);
+
+
+                tree2 = new SplayBST<>();
+
+                tree2.add(11);
+                tree2.add(13);
+                tree2.add(25);
+                tree2.add(4);
+                tree2.add(10);
+                tree2.add(1);
+                tree2.add(15);
+                tree2.add(5);
+                tree2.add(2);
+                tree2.add(6);
+
+                System.out.println("fMax=" + tree2.findMax(tree2.root));
+                System.out.println("fMin=" + tree2.findMin(tree2.root));
+                System.out.println("control=");
+                tree2.printTree(tree2.root);
+
+
+                res = tree2.split(4);
+                System.out.println("left side after split(4) =");
+                tree2.printTree(res.left);
+                System.out.println("right side after split(4) =");
+                tree2.printTree(res.right);
+
+                System.out.println("tree after merge =");
+                tree2.merge(res.left, res.right);
+                tree2.printTree(tree2.root);
         }
 
         @Test
         void testIterator() {
-                actual = new SplayBST<>();
-                control = new SplayBST<>();
+                tree1 = new SplayBST<>();
+                tree2 = new SplayBST<>();
 
-                assertTrue(actual.add(5));
-                assertTrue(actual.add(2));
-                assertTrue(actual.add(10));
-                assertTrue(actual.add(1));
-                assertTrue(actual.add(3));
-                assertTrue(actual.add(15));
+                assertTrue(tree1.add(5));
+                assertTrue(tree1.add(2));
+                assertTrue(tree1.add(10));
+                assertTrue(tree1.add(1));
+                assertTrue(tree1.add(3));
+                assertTrue(tree1.add(15));
 
-                assertTrue(control.add(1));
-                assertTrue(control.add(15));
-                assertTrue(control.add(3));
-                assertTrue(control.add(5));
-                assertTrue(control.add(10));
-                assertTrue(control.add(2));
-                control.printTree(control.root);
+                assertTrue(tree2.add(1));
+                assertTrue(tree2.add(15));
+                assertTrue(tree2.add(3));
+                assertTrue(tree2.add(5));
+                assertTrue(tree2.add(10));
+                assertTrue(tree2.add(2));
+                tree2.printTree(tree2.root);
 
-                Iterator<Integer> iterator1 = actual.iterator();
+                Iterator<Integer> iterator1 = tree1.iterator();
                 List<Integer> check1 = new ArrayList<>();
-                Iterator<Integer> iterator2 = control.iterator();
+                Iterator<Integer> iterator2 = tree2.iterator();
                 List<Integer> check2 = new ArrayList<>();
 
                 while (iterator1.hasNext()) {
                         check1.add(iterator1.next());
                         check2.add(iterator2.next());
                 }
-                assertEquals(actual, control);
+                assertEquals(tree1, tree2);
                 assertArrayEquals(check1.toArray(), check2.toArray());
 
-                iterator2 = control.iterator();
+                iterator2 = tree2.iterator();
 
                 while (iterator2.hasNext()) {
                         iterator2.next();
                         iterator2.remove();
-                        control.printTree(control.root);
-                        assertNotEquals(actual, control);
+                        tree2.printTree(tree2.root);
+                        assertNotEquals(tree1, tree2);
                 }
 
         }

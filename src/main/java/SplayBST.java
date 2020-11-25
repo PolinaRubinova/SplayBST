@@ -90,8 +90,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     public Pair<Node<T>, Node<T>> split (T element) {
         if (root == null) return new Pair<>(null, null);
 
-        Node<T> left = new Node<>(null);
-        Node<T> right = new Node<>(null);
+        Node<T> left = null;
+        Node<T> right = null;
 
         root = splay(root, element);
         int comparison = element.compareTo(root.value);
@@ -110,24 +110,34 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return new Pair<>(left, right);
     }
 
-    // Находим максимальное -> делаем его корнем
+    // Находим максимальный элемент
 
-    public Node<T> findMax(Node<T> start) {
-        if (start == null) return null;
-        while (start.right != null) {
-            start = splay(start, start.right.value);
+    public T findMax(Node<T> start) {
+        T max = start.value;
+        if (start.right != null) {
+            T mbMax = (T) findMax(start.right);
+            if (max.compareTo(mbMax) < 0) max = mbMax;
         }
-        return start;
+        if (start.left != null) {
+            T mbMax = findMax(start.left);
+            if (max.compareTo(mbMax) < 0) max = mbMax;
+        }
+        return max;
     }
 
-    // Находим минимальное -> делаем его корнем
+    // Находим минимальный элемент
 
-    public Node<T> findMin(Node<T> start) {
-        if (start == null) return null;
-        while (start.left != null) {
-            start = splay(start, start.left.value);
+    public T findMin(Node<T> start) {
+        T min = start.value;
+        if (start.left != null) {
+            T mbMin = findMin(start.left);
+            if (min.compareTo(mbMin) > 0) min = mbMin;
         }
-        return start;
+        if (start.right != null) {
+            T mbMin = (T) findMin(start.right);
+            if (min.compareTo(mbMin) > 0) min = mbMin;
+        }
+        return min;
     }
 
     // Для слияния деревьев leftTree и rightTree, в которых все ключи
@@ -143,8 +153,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         else if (left == null) return right;
         else if (right == null) return left;
 
-        left = findMax(left);
-        right = findMin(right);
+        left = splay(left, findMax(left));
+        right = splay(right, findMin(right));
         left.right = right;
         root = left;
         return root;
@@ -211,8 +221,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         Pair splitRes = split(element);
         root = new Node<>(element);
 
-        if (splitRes.left.value != null) root.left = splitRes.left;
-        if (splitRes.right.value != null) root.right = splitRes.right;
+        if (splitRes.left != null) root.left = splitRes.left;
+        if (splitRes.right != null) root.right = splitRes.right;
         return true;
     }
 
