@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,11 +9,15 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 class TestSplayBST {
+
         AbstractSet<Integer> tree1 = new SplayBST<>();
         SplayBST<Integer> tree2 = new SplayBST<>();
 
+        TestSplayBST() throws IOException {
+        }
+
         @Test
-        void testAddAddWithSplitContainsFind() {
+        void testAddAddWithSplitContainsFind() throws IOException {
                 tree1 = new SplayBST<>();
                 tree2 = new SplayBST<>();
 
@@ -62,7 +68,7 @@ class TestSplayBST {
 
 
         @Test
-        void testRemoveRemoveWitSplit() {
+        void testRemoveRemoveWitSplit() throws IOException {
                 tree1 = new SplayBST<>();
                 tree2 = new SplayBST<>();
 
@@ -118,76 +124,86 @@ class TestSplayBST {
                 assertTrue(tree2.remove(3));
                 assertTrue(tree2.remove(10));
                 assertTrue(tree2.isEmpty());
+
                 assertEquals(tree1, tree2);
         }
 
         @Test
-        void testSplitMergeFindMaxFindMinVisualization() {
+        void testSplitMergeFindMaxFindMinVisualization() throws IOException {
+
+                System.out.println("Результаты будут зафиксированны в файле output.txt");
+                System.out.println("Для того чтобы ознакомиться именно с ними, запустите данный тест отдельно.");
                 tree2 = new SplayBST<>();
-                SplayBST.Pair res = null;
+                SplayBST.Pair res;
 
-                tree2.add(10);
-                tree2.add(1);
-                tree2.add(15);
-                tree2.add(5);
-                tree2.add(2);
-                tree2.add(6);
-                tree2.add(11);
-                tree2.add(13);
-                tree2.add(25);
-                tree2.add(4);
-                tree2.add(21);
-                tree2.add(7);
+                assertTrue(tree2.add(11));
+                assertTrue(tree2.add(1));
+                assertTrue(tree2.add(15));
+                assertTrue(tree2.add(5));
+                assertTrue(tree2.add(2));
+                assertTrue(tree2.add(6));
+                assertTrue(tree2.add(10));
+                assertTrue(tree2.add(13));
+                assertTrue(tree2.add(25));
+                assertTrue(tree2.add(4));
+                assertTrue(tree2.add(21));
+                assertTrue(tree2.add(7));
 
-                System.out.println("fMax=" + tree2.findMax(tree2.root));
-                System.out.println("fMin=" + tree2.findMin(tree2.root));
-                System.out.println("control=");
+                tree2.writer.write("fMax = " + tree2.findMax(tree2.root).value + '\n');
+                tree2.writer.write("fMin = " + tree2.findMin(tree2.root).value + '\n');
+                tree2.writer.write("control:" + '\n');
                 tree2.printTree(tree2.root);
 
 
                 res = tree2.split(15);
-                System.out.println("left side after split(15) =");
+                tree2.writer.write("left side after split(15) =" + '\n');
                 tree2.printTree(res.left);
-                System.out.println("right side after split(15) =");
+                tree2.writer.write("right side after split(15) =" + '\n');
                 tree2.printTree(res.right);
 
-                System.out.println("tree after merge =");
+                tree2.writer.write("tree after merge =" + '\n');
                 tree2.merge(res.left, res.right);
                 tree2.printTree(tree2.root);
 
 
-                tree2 = new SplayBST<>();
+                tree2.clear();
 
-                tree2.add(11);
-                tree2.add(13);
-                tree2.add(25);
-                tree2.add(4);
-                tree2.add(10);
-                tree2.add(1);
-                tree2.add(15);
-                tree2.add(5);
-                tree2.add(2);
-                tree2.add(6);
+                assertTrue(tree2.add(11));
+                assertTrue(tree2.add(13));
+                assertTrue(tree2.add(25));
+                assertTrue(tree2.add(4));
+                assertTrue(tree2.add(10));
+                assertTrue(tree2.add(1));
+                assertTrue(tree2.add(15));
+                assertTrue(tree2.add(5));
+                assertTrue(tree2.add(2));
+                assertTrue(tree2.add(6));
+                assertTrue(tree2.add(21));
 
-                System.out.println("fMax=" + tree2.findMax(tree2.root));
-                System.out.println("fMin=" + tree2.findMin(tree2.root));
-                System.out.println("control=");
+                tree2.writer.write("fMax = " + tree2.findMax(tree2.root).value + '\n');
+                tree2.writer.write("fMin = " + tree2.findMin(tree2.root).value + '\n');
+                tree2.writer.write("control:" + '\n');
                 tree2.printTree(tree2.root);
 
 
-                res = tree2.split(4);
-                System.out.println("left side after split(4) =");
+        res = tree2.split(6);
+                tree2.writer.write("left side after split(6) =" + '\n');
                 tree2.printTree(res.left);
-                System.out.println("right side after split(4) =");
+                tree2.writer.write("right side after split(6) =" + '\n');
                 tree2.printTree(res.right);
 
-                System.out.println("tree after merge =");
+                tree2.writer.write("tree after merge =" + '\n');
                 tree2.merge(res.left, res.right);
                 tree2.printTree(tree2.root);
+
+                tree2.writer.close();
         }
 
         @Test
-        void testIterator() {
+        void testIterator() throws IOException {
+
+                System.out.println("Результаты будут зафиксированны в файле output.txt");
+                System.out.println("Для того чтобы ознакомиться именно с ними, запустите данный тест отдельно.");
                 tree1 = new SplayBST<>();
                 tree2 = new SplayBST<>();
 
@@ -197,6 +213,9 @@ class TestSplayBST {
                 assertTrue(tree1.add(1));
                 assertTrue(tree1.add(3));
                 assertTrue(tree1.add(15));
+                tree2.writer.write("tree1:" + '\n');
+                tree2.writer.write(String.valueOf(tree1) + '\n');
+                tree2.writer.write('\n');
 
                 assertTrue(tree2.add(1));
                 assertTrue(tree2.add(15));
@@ -204,28 +223,48 @@ class TestSplayBST {
                 assertTrue(tree2.add(5));
                 assertTrue(tree2.add(10));
                 assertTrue(tree2.add(2));
+                tree2.writer.write("tree2:" + '\n');
                 tree2.printTree(tree2.root);
+
+                assertEquals(tree1.size(), tree2.size());
 
                 Iterator<Integer> iterator1 = tree1.iterator();
                 List<Integer> check1 = new ArrayList<>();
+                Integer c1;
                 Iterator<Integer> iterator2 = tree2.iterator();
                 List<Integer> check2 = new ArrayList<>();
+                Integer c2;
 
-                while (iterator1.hasNext()) {
-                        check1.add(iterator1.next());
-                        check2.add(iterator2.next());
+                tree2.writer.write('\n');
+                tree2.writer.write("Итерация по tree2:" + '\n');
+                while (iterator1.hasNext() && iterator2.hasNext()) {
+                        c1 = iterator1.next();
+                        c2 = iterator2.next();
+                        tree2.writer.write("iterator1.next() = " + c1 + '\n');
+                        tree2.writer.write("iterator2.next() = " + c2 + '\n');
+                        check1.add(c1);
+                        check2.add(c2);
+
+                        tree2.printTree(tree2.root);
                 }
                 assertEquals(tree1, tree2);
-                assertArrayEquals(check1.toArray(), check2.toArray());
+
+                tree2.writer.write("check1 = " + check1 + '\n');
+                tree2.writer.write("check2 = " + check2 + '\n');
+                assertEquals(check1, check2);
 
                 iterator2 = tree2.iterator();
 
+                tree2.writer.write('\n');
+                tree2.writer.write("Последовательное удаление элементов tree2:" + '\n');
                 while (iterator2.hasNext()) {
-                        iterator2.next();
+                        tree2.writer.write("iterator2.next() = " + iterator2.next() + '\n');
                         iterator2.remove();
                         tree2.printTree(tree2.root);
+                        tree2.writer.write('\n');
                         assertNotEquals(tree1, tree2);
                 }
 
+                tree2.writer.close();
         }
 }

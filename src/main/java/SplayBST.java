@@ -1,6 +1,11 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
+
+    public SplayBST() throws IOException {
+    }
 
     public static class Node<T> {
         T value;
@@ -85,7 +90,6 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // Возвращаем два дерева, полученные отсечением правого или левого
     // поддерева от корня, в зависимости от того, содержит корень
     // элемент больше или не больше, чем element.
-
     public Pair split (T element) {
         if (root == null) return new Pair(null, null);
 
@@ -110,31 +114,29 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     }
 
     // Находим максимальный элемент
-
-    public T findMax(Node<T> start) {
-        T max = start.value;
+    public Node<T> findMax(Node<T> start) {
+        Node<T> max = start;
         if (start.right != null) {
-            T mbMax = (T) findMax(start.right);
-            if (max.compareTo(mbMax) < 0) max = mbMax;
+            Node<T> mbMax = findMax(start.right);
+            if (max.value.compareTo(mbMax.value) < 0) max = mbMax;
         }
         if (start.left != null) {
-            T mbMax = findMax(start.left);
-            if (max.compareTo(mbMax) < 0) max = mbMax;
+            Node<T> mbMax = findMax(start.left);
+            if (max.value.compareTo(mbMax.value) < 0) max = mbMax;
         }
         return max;
     }
 
     // Находим минимальный элемент
-
-    public T findMin(Node<T> start) {
-        T min = start.value;
+    public Node<T> findMin(Node<T> start) {
+        Node<T> min = start;
         if (start.left != null) {
-            T mbMin = findMin(start.left);
-            if (min.compareTo(mbMin) > 0) min = mbMin;
+            Node<T> mbMin = findMin(start.left);
+            if (min.value.compareTo(mbMin.value) > 0) min = mbMin;
         }
         if (start.right != null) {
-            T mbMin = (T) findMin(start.right);
-            if (min.compareTo(mbMin) > 0) min = mbMin;
+            Node<T> mbMin = findMin(start.right);
+            if (min.value.compareTo(mbMin.value) > 0) min = mbMin;
         }
         return min;
     }
@@ -145,15 +147,15 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     // После этого корень tree1 содержит максимальный элемент,
     // при этом у него нет правого ребёнка.
-    // Делаем tree2 правым поддеревом i и возвращаем полученное дерево.
+    // Делаем tree2 правым поддеревом и возвращаем полученное дерево.
 
     public Node<T> merge (Node<T> left, Node<T> right) {
         if (left == null && right == null) return null;
         else if (left == null) return right;
         else if (right == null) return left;
 
-        left = splay(left, findMax(left));
-        right = splay(right, findMin(right));
+        left = splay(left, findMax(left).value);
+        right = splay(right, findMin(right).value);
         left.right = right;
         root = left;
         return root;
@@ -162,9 +164,9 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     // Добавление элемента в дерево
 
-    // Если элемента нет в множестве, функция добавляет его в
+    // Если элемента нет в дереве, функция добавляет его в
     // дерево и возвращает true. В ином случае функция оставляет
-    // множество нетронутым и возвращает false.
+    // дерево нетронутым и возвращает false.
 
     @Override
     public boolean add(T element) {
@@ -206,8 +208,8 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return true;
     }
 
-    // Запускаем split(tree, element), который нам возвращает
-    // деревья tree1 и tree2, их подвешиваем к element
+    // Запускаем split(element), который нам возвращает
+    // деревья treeLeft и treeRight, их подвешиваем к element
     // как левое и правое поддеревья соответственно.
 
     public boolean addWithSplit(T element) {
@@ -244,7 +246,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             root = root.right;
         }
 
-        // Если левый потомок существует
+        // Если левый потомок существует,
         // правый потомок корня становится правым
         // потомком левого потомка корня,
         // а левый потомок становится корнем
@@ -256,7 +258,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     }
 
 
-    //Находим элемент в дереве, делаем Splay для него,
+    // Находим элемент в дереве, делаем Splay для него,
     // делаем текущим деревом Merge его детей.
 
     public boolean removeWithSplit(T element) {
@@ -337,7 +339,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         }
     }
 
-    // Правое вращение подерева с корнем y
+    // Правое вращение поддерева с корнем y
     private Node<T> rotateRight(Node<T> x) {
         Node<T> y = x.left;
         x.left = y.right;
@@ -345,7 +347,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         return y;
     }
 
-    // Левое вращение подерева с корнем x
+    // Левое вращение поддерева с корнем x
     private Node<T> rotateLeft(Node<T> x) {
         Node<T> y = x.right;
         x.right = y.left;
@@ -366,9 +368,14 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         private final Stack<Node<T>> stack = new Stack<>();
         private Node<T> current = new Node<>(null);
 
-        // Из текущего узла «спускаемся» до самого нижнего левого
-        // узла, добавляя в стек все посещенные узлы.
+        // Инициализируем, делая наименьший элемент корнем дерева
+        private SplayBSTIterator() {
+            if (root != null) root = splay(root, findMin(root).value);
+            inOrderIterator(root);
+        }
 
+        // Из текущего узла «спускаемся» до самого нижнего
+        // левого узла, добавляя в стек все посещенные узлы.
         private void inOrderIterator(Node<T> node) {
             Node<T> n = node;
             while (n != null) {
@@ -377,18 +384,15 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             }
         }
 
-        private SplayBSTIterator() {
-            inOrderIterator(root);
-        }
-
         @Override
         public boolean hasNext() {
             return !stack.isEmpty();
         }
 
+        // С помощью операции splay делаем узел из стека новым корнем
+
         // Если в текущем узле имеется правое поддерево,
         // начинаем следующую итерацию с правого узла.
-
         @Override
         public T next() {
             if (!hasNext()) throw new NoSuchElementException();
@@ -396,78 +400,83 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             Node<T> node = stack.pop();
             current = node;
             inOrderIterator(node.right);
+            root = splay(root, node.value);
             return node.value;
         }
 
-
+        // Функция удаляет из множества элемент,
+        // возвращённый крайним вызовом функции next().
         @Override
         public void remove() {
             if (current == null) throw new IllegalStateException();
             SplayBST.this.remove(current.value);
-            current = null;
+            current.value = null;
         }
     }
 
 
+    public FileWriter writer = new FileWriter("src/test/java/output.txt");
+
     // Визуализация
-    public void printTree(Node<T> n) {
+    public void printTree(Node<T> n) throws IOException {
         int maxLevel = maxLevel(n);
-        printTree(Collections.singletonList(n), 1, maxLevel);
+        printTree(Collections.singletonList(n), 1, maxLevel, writer);
     }
 
-    private static <T extends Comparable<?>> void printTree(List<Node<T>> nodes, int level, int maxLevel) {
+    private static <T extends Comparable<?>> void printTree(List<Node<T>> nodes, int level, int maxLevel, FileWriter writer) throws IOException {
         if (nodes.isEmpty() || isAllElementsNull(nodes)) return;
+
 
         int floor = maxLevel - level;
         int lines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
         int firstSpaces = (int) Math.pow(2, (floor)) - 1;
         int betweenSpaces = (int) Math.pow(2, (floor + 1)) - 1;
 
-        printWhiteSpaces(firstSpaces);
+        printWhiteSpaces(firstSpaces, writer);
         ArrayList<Node<T>> newNodes = new ArrayList<>();
 
         for (Node<T> node : nodes) {
             if (node != null) {
-                System.out.print(node.value);
+                writer.write(node.value.toString());
                 newNodes.add(node.left);
                 newNodes.add(node.right);
             } else {
                 newNodes.add(null);
                 newNodes.add(null);
-                System.out.print(" ");
+                writer.write(" ");
             }
-            printWhiteSpaces(betweenSpaces);
+            printWhiteSpaces(betweenSpaces, writer);
         }
-        System.out.println();
+        writer.write('\n');
 
         for (int i = 1; i <= lines; i++) {
             for (Node<T> node : nodes) {
-                printWhiteSpaces(firstSpaces - i);
+                printWhiteSpaces(firstSpaces - i, writer);
                 if (node == null) {
-                    printWhiteSpaces(lines + lines + i + 1);
+                    printWhiteSpaces(lines + lines + i + 1, writer);
                     continue;
                 }
 
                 if (node.left != null) {
-                    System.out.print("/");
-                } else printWhiteSpaces(1);
+                    writer.write("/");
+                } else printWhiteSpaces(1, writer);
 
-                printWhiteSpaces(i + i - 1);
+                printWhiteSpaces(i + i - 1, writer);
 
                 if (node.right != null) {
-                    System.out.print("\\");
-                } else printWhiteSpaces(1);
+                    writer.write("\\");
+                } else printWhiteSpaces(1, writer);
 
-                printWhiteSpaces(lines + lines - i);
+                printWhiteSpaces(lines + lines - i, writer);
             }
-            System.out.println();
+            writer.write('\n');
         }
-        printTree(newNodes, level + 1, maxLevel);
+        printTree(newNodes, level + 1, maxLevel, writer);
     }
 
     // Печатаем пробелы
-    private static void printWhiteSpaces(int count) {
-        for (int i = 0; i < count; i++) System.out.print(" ");
+    private static void printWhiteSpaces(int count, FileWriter writer) throws IOException {
+        for (int i = 0; i < count; i++) writer.write(" ");
     }
 
     private static <T extends Comparable<?>> int maxLevel(Node<T> node) {
