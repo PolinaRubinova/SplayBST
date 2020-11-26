@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
-    public SplayBST() throws IOException {
+    public SplayBST() {
     }
 
     public static class Node<T> {
@@ -65,7 +65,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // бинарного дерева поиска, только после нее
     // запускается операция splay.
 
-    private Node<T> find(Node<T> start, T element){
+    private Node<T> find(Node<T> start, T element) {
         int comparison = element.compareTo(start.value);
         if (comparison == 0) {
             return start;
@@ -92,7 +92,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // Возвращаем два дерева, полученные отсечением правого или левого
     // поддерева от корня, в зависимости от того, содержит корень
     // элемент больше или не больше, чем element.
-    public Pair split (T element) {
+    public Pair split(T element) {
         if (root == null) return new Pair(null, null);
 
         Node<T> left = null;
@@ -151,7 +151,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     // при этом у него нет правого ребёнка.
     // Делаем tree2 правым поддеревом и возвращаем полученное дерево.
 
-    public Node<T> merge (Node<T> left, Node<T> right) {
+    public Node<T> merge(Node<T> left, Node<T> right) {
         if (left == null && right == null) return null;
         else if (left == null) return right;
         else if (right == null) return left;
@@ -311,7 +311,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             }
 
             // Сделаем второе вращение для корня
-            return  (node.left == null) ? node : rotateRight(node);
+            return (node.left == null) ? node : rotateRight(node);
         }
 
         //Если элемент находится в правом поддереве
@@ -323,7 +323,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             int cmp2 = element.compareTo(node.right.value);
             if (cmp2 < 0) {
                 // Приведем элемент как корень right-left
-                node.right.left  = splay(node.right.left, element);
+                node.right.left = splay(node.right.left, element);
                 // Сделаем первое вращение для root.right
                 if (node.right.left != null)
                     node.right = rotateRight(node.right);
@@ -418,17 +418,14 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
     }
 
 
-    public FileWriter writer = new FileWriter("src/test/java/output.txt");
-
     // Визуализация
-    public void printTree(Node<T> n) throws IOException {
+    public void printTree(Node<T> n, FileWriter writer) throws IOException {
         int maxLevel = maxLevel(n);
         printTree(Collections.singletonList(n), 1, maxLevel, writer);
     }
 
     private static <T extends Comparable<?>> void printTree(List<Node<T>> nodes, int level, int maxLevel, FileWriter writer) throws IOException {
         if (nodes.isEmpty() || isAllElementsNull(nodes)) return;
-
 
         int floor = maxLevel - level;
         int lines = (int) Math.pow(2, (Math.max(floor - 1, 0)));
