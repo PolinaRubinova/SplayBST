@@ -10,8 +10,8 @@ import static org.junit.Assert.*;
 
 class TestSplayBST {
 
-        AbstractSet<Integer> tree1 = new SplayBST<>();
-        SplayBST<Integer> tree2 = new SplayBST<>();
+        private AbstractSet<Integer> tree1 = new SplayBST<>();
+        private SplayBST<Integer> tree2 = new SplayBST<>();
 
         TestSplayBST() throws IOException {
         }
