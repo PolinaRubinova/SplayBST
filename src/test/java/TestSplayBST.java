@@ -13,9 +13,6 @@ class TestSplayBST {
         private AbstractSet<Integer> tree1 = new SplayBST<>();
         private SplayBST<Integer> tree2 = new SplayBST<>();
 
-        TestSplayBST() throws IOException {
-        }
-
         @Test
         void testAddAddWithSplitContainsFind() throws IOException {
             System.out.println("Результаты testAddAddWithSplitContainsFind() будут зафиксированны в файле output1.txt");
