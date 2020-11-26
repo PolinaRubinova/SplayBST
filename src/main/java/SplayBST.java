@@ -47,8 +47,10 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     @Override
     public boolean contains(Object object) {
-        return find((T) object) != null &&
-                Objects.requireNonNull(find((T) object)).value == object;
+        @SuppressWarnings("unchecked")
+        T element = (T) object;
+        return find(element) != null &&
+                Objects.requireNonNull(find(element)).value == object;
     }
 
     // Эта функция возвращает новый корень Splay Tree
@@ -232,6 +234,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
 
     @Override
     public boolean remove(Object object) {
+        @SuppressWarnings("unchecked")
         T element = (T) object;
         if (root == null) return false;
 
