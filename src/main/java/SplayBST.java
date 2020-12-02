@@ -219,7 +219,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
             root = new Node<>(element);
             return true;
         }
-        if (root.value == element) return false;
+        if (contains(element)) return false;
 
         Pair splitRes = split(element);
         root = new Node<>(element);

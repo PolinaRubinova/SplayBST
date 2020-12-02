@@ -53,6 +53,7 @@ class TestSplayBST {
             assertTrue(tree2.addWithSplit(1));
             tree2.printTree(tree2.root, writer);
             assertTrue(tree2.addWithSplit(15));
+            assertFalse(tree2.addWithSplit(1));
             tree2.printTree(tree2.root, writer);
             assertTrue(tree2.addWithSplit(3));
             tree2.printTree(tree2.root, writer);
