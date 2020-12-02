@@ -413,7 +413,7 @@ public class SplayBST<T extends Comparable<T>> extends AbstractSet<T> {
         public void remove() {
             if (current == null) throw new IllegalStateException();
             SplayBST.this.remove(current.value);
-            current.value = null;
+            current = null;
         }
     }
 

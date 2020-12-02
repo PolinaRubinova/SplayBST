@@ -185,7 +185,7 @@ iterator2.next() = 10
 
 iterator2.next() = 15
 
-iterator2.next() = null
+iterator2.next() = 10
 
-iterator2.next() = null
+iterator2.next() = 15
 
