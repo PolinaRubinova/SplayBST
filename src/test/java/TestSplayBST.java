@@ -12,6 +12,7 @@ class TestSplayBST {
 
         private AbstractSet<Integer> tree1 = new SplayBST<>();
         private SplayBST<Integer> tree2 = new SplayBST<>();
+        private SplayBST<Integer> tree3 = new SplayBST<>();
 
         @Test
         void testAddAddWithSplitContainsFind() throws IOException {
@@ -49,7 +50,24 @@ class TestSplayBST {
             assertFalse(tree1.contains(0));
             assertFalse(tree1.contains(16));
 
-            writer.write("Добавляем элементы 1, 15, 3, 5, 10, 2 в tree2:" + '\n');
+            writer.write("Добавляем элементы add() 1, 15, 3, 5, 10, 2 в tree3:" + '\n');
+            assertTrue(tree3.add(1));
+            tree3.printTree(tree3.root, writer);
+            assertTrue(tree3.add(15));
+            assertFalse(tree3.add(1));
+            tree3.printTree(tree3.root, writer);
+            assertTrue(tree3.add(3));
+            tree3.printTree(tree3.root, writer);
+            assertTrue(tree3.add(5));
+            tree3.printTree(tree3.root, writer);
+            assertTrue(tree3.add(10));
+            tree3.printTree(tree3.root, writer);
+            assertTrue(tree3.add(2));
+            tree3.printTree(tree3.root, writer);
+            assertEquals(tree3.size(), 6);
+            assertFalse(tree3.isEmpty());
+
+            writer.write("Добавляем элементы addWithSplit() 1, 15, 3, 5, 10, 2 в tree2:" + '\n');
             assertTrue(tree2.addWithSplit(1));
             tree2.printTree(tree2.root, writer);
             assertTrue(tree2.addWithSplit(15));
